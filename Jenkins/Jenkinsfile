@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+
+    environment {
+        S3_BUCKET = 'my-s3-bucket-for-jenkins-pipeline-setup'  // Replace with your actual S3 bucket name
+        S3_KEY = 'my-app.zip'  // Replace with the actual S3 key you want to use
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/ManojKamatam/DevOps_S3_Creation_Jenkins.git', branch: 'main'
+            }
+        }
+        stage('Deploy with Terraform') {
+            steps {
+                dir('Terraform') {  // Change directory to the terraform folder
+                    sh 'terraform init'
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
+    }
+}
